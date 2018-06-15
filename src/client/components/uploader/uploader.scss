@@ -1,0 +1,31 @@
+@import "_box";
+@import "_colors";
+
+.uploader__dropzone {
+    @include box();
+    height: 60px;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.7rem;
+    font-weight: bold;
+    color: $white1;
+    border-color: $blue2;
+    user-select: none;
+    cursor: pointer;
+    margin-top: 0 !important;
+    background-color: $blue1;
+}
+
+.uploader__dropzone--accept {
+    background-color: $green1;
+}
+
+.uploader__dropzone--reject {
+    background-color: $red1;
+}
+
+.uploader__dropzone--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
