@@ -5,6 +5,14 @@ interface OccurrenceMap {
 }
 
 /**
+ * Converts a token to lowercase and removes surrounding punctuation marks
+ * @param token input token
+ * @returns the normalized token
+ */
+const normalizeToken = (token: string) =>
+    token.toLowerCase().replace(/(?!'\w)\W/gi, "");
+
+/**
  * Finds the most frequently used words in a file (all of them if there are more)
  * @param filePath Path of the file
  * @returns Promise which resolves to the array of most frequently used words in the file
@@ -12,7 +20,7 @@ interface OccurrenceMap {
 export const findMostFrequentWords = async (
     filePath: string,
 ): Promise<string[]> =>
-    new Promise<string[]>((resolve, reject) => {
+    new Promise<string[]>((resolve, _) => {
         const stream = fs.createReadStream(filePath, {
             encoding: "utf8",
         });
@@ -23,8 +31,8 @@ export const findMostFrequentWords = async (
             const tokens = data.split(/\s+/g);
 
             for (const token of tokens) {
-                occurrences[token.toLowerCase()] =
-                    (occurrences[token.toLowerCase()] || 0) + 1;
+                occurrences[normalizeToken(token)] =
+                    (occurrences[normalizeToken(token)] || 0) + 1;
             }
         });
 
