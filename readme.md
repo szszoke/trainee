@@ -7,7 +7,6 @@ Link to the problem: https://bitbucket.org/Gbodestad/hiq.traineeinterview/
 1.  Contractions such as "I'm" or "you've" are considered one word
 2.  When a file contains multiple most used words of the same quantity, all of them are surrounded
 3.  Multiple case styles (upper/lowercase) of a word are considered to be the same word
-4.  Punctuation marks and special symbols except _ (underline) are not considered to be the part of the words and are ignored
 
 ### System requirements
 

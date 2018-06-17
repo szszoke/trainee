@@ -10,7 +10,7 @@ interface OccurrenceMap {
  * @returns the normalized token
  */
 const normalizeToken = (token: string) =>
-    token.toLowerCase().replace(/(?!'\w)\W/gi, "");
+    token.toLowerCase().replace(/(?!\W+\w)\W/gi, "");
 
 /**
  * Finds the most frequently used words in a file (all of them if there are more)

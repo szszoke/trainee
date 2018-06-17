@@ -27,7 +27,7 @@ export const surroundOccurrences = (
                         prev.replace(
                             new RegExp(
                                 `(^|\\s|\\W?)(${curr.replace(
-                                    /[-\/\\^$*+?.()|[\]{}]/g,
+                                    /[\/\\^$*+?.()|[\]{}]/g,
                                     "\\$&",
                                 )}(?![']\\w))(\\s|\\W|$)`,
                                 "gium",
