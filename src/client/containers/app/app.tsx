@@ -116,7 +116,8 @@ export class App extends React.Component<{}, AppState> {
                     window.clearTimeout(handle);
                 }
             } else {
-                this.setState({ status: "file-too-big" });
+                this.textViewRef.clearMeasurerCache();
+                this.setState({ lines: [], status: "file-too-big" });
             }
         }
     };
