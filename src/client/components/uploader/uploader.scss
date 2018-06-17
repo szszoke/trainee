@@ -19,10 +19,12 @@
 
 .uploader__dropzone--accept {
     background-color: $green1;
+    border-color: $green2;
 }
 
 .uploader__dropzone--reject {
     background-color: $red1;
+    border-color: $red2;
 }
 
 .uploader__dropzone--disabled {
