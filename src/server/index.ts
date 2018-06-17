@@ -1,5 +1,6 @@
 import * as express from "express";
 import * as multer from "multer";
+import * as compression from "compression";
 import * as fs from "fs";
 import * as utils from "~/utils";
 import { listenerCount } from "cluster";
@@ -57,6 +58,7 @@ const { listen, init } = new class {
             },
         );
 
+        this.app.use(compression());
         this.app.use(express.static("./dist"));
         this.app.get("/", (_, res) => res.sendFile("./dist/index.html"));
         this.app.use(this.router);
