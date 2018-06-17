@@ -6,8 +6,8 @@ Link to the problem: https://bitbucket.org/Gbodestad/hiq.traineeinterview/
 
 1.  Contractions such as "I'm" or "you've" are considered one word
 2.  When a file contains multiple most used words of the same quantity, all of them are surrounded
-3.  Multiple case styles of a word are considered to be the same word
-4.  Punctuation makrs are not considered to be the part of the words and are ignored
+3.  Multiple case styles (upper/lowercase) of a word are considered to be the same word
+4.  Punctuation marks and special symbols except _ (underline) are not considered to be the part of the words and are ignored
 
 ### System requirements
 
@@ -32,11 +32,11 @@ Link to the problem: https://bitbucket.org/Gbodestad/hiq.traineeinterview/
 
 ### Motivation
 
-The following tools/technologies are meant to provide a simple developmet workflow, fast and flexible code.
+The following tools/technologies are meant to provide a simple developmet workflow and fast and flexible code.
 
 #### JavaScript/TypeScript
 
-JavaScript is powerful and flexible but it's not type-safe. TypeScript is typed superset of JavaScript. It provides type checking during compile time which significantly reduces the chances for bugs and results in more readable code.
+JavaScript is powerful and flexible but it's not type-safe. TypeScript is a typed superset of JavaScript. It provides type checking during compile time which significantly reduces the risk for bugs and results in more readable code.
 
 #### async/await
 
@@ -83,13 +83,17 @@ try {
 The code is much easier to read. No need to duplicat the error handling code, errors are handled with a single `try/catch` block.
 #### React
 
-React is a declarative JavaScript library for building user interfaces. It is very simple to use and very fast to get up and going. It has a huge community beind and an enormous selection of already existing solutions for many different problems.
+React is a declarative JavaScript library for building user interfaces. It is very simple to use and very fast to get up and going. It has a huge community behind and an enormous selection of already existing solutions for many different problems.
+
+#### Virtual rendering
+
+The project uses the `react-virtualized` package to optimize the rendering of large files.
 
 #### Webpack and Babel
 
 Webpack is a popular module bundler for JavaScript applications. It supports both the browser and Node.js. It supports differend profiles for development and production. It is extensible with plugins to achieve flexibility.
 
-Babel enables ES6 features during development and transpiles them to JavaScript which every modern browser understands.
+Babel enables modern JavaScript features during development and transpiles them to code which every modern browser understands.
 
 #### Node.js with Express
 
