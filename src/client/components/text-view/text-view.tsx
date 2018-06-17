@@ -59,8 +59,14 @@ export class TextView extends React.Component<TextViewProps, TextViewState> {
 
     onResize = ({ width }: Size) => this.setState({ width });
 
-    onScrollbarPresenceChange = ({ size }: ScrollbarPresenceParams) =>
-        this.setState({ scrollbarWidth: size });
+    onScrollbarPresenceChange = ({ size, vertical }: ScrollbarPresenceParams) =>
+        this.setState({ scrollbarWidth: vertical ? size : 0 }, () => {
+            // Update the list if the scrollbar presence changed
+            if (this.listRef) {
+                this.listRef.measureAllRows();
+                this.listRef.forceUpdateGrid();
+            }
+        });
 
     render() {
         const { lines } = this.props;
