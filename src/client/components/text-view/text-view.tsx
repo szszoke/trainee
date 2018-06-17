@@ -9,7 +9,13 @@ import { ScrollbarPresenceParams } from "react-virtualized/dist/es/Grid";
 import "./text-view.scss";
 
 export interface TextViewProps {
-    placeholder?: React.ReactNode;
+    /**
+     * Placeholder text displayed when the number of lines is zero
+     */
+    placeholder?: string;
+    /**
+     * Lines to display
+     */
     lines: string[];
 }
 
@@ -22,6 +28,11 @@ export class TextView extends React.Component<TextViewProps, TextViewState> {
     private readonly cellMeasurerCache: CellMeasurerCache;
     private listRef: List;
 
+    /**
+     * Virtualized text view component to display many lines of text
+     * Only a subset of the lines are rendered at any given time
+     * @param props component props
+     */
     constructor(props) {
         super(props);
 
@@ -123,5 +134,9 @@ export class TextView extends React.Component<TextViewProps, TextViewState> {
         return <div className="text-view__placeholder">{placeholder}</div>;
     };
 
+    /**
+     * Clear the row height measurement cache
+     * Use after the lines have been changed
+     */
     clearMeasurerCache = () => this.cellMeasurerCache.clearAll();
 }

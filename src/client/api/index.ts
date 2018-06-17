@@ -11,6 +11,8 @@ export default new class {
     /**
      * Upload a file to the server
      * @param file The file to upload
+     * @param onUploadProgress callback function for tracking the upload progress
+     * @param onDownloadProgress callback function for tracking the download progress
      * @returns a promise which resolves to the response from the server
      */
     uploadFile = (

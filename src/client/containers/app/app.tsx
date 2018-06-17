@@ -73,6 +73,11 @@ export class App extends React.Component<{}, AppState> {
     onDropFile: DropFilesEventHandler = async acceptedFiles => {
         if (acceptedFiles && acceptedFiles.length === 1) {
             const file = acceptedFiles[0];
+
+            // Only display the upload progress if it's taking more
+            // than 500 ms
+            // This way the user doesn't have to see th upload progress
+            // instantly jumping to 100%
             const handle = window.setTimeout(() => {
                 const { status } = this.state;
                 if (status !== "processing") {
@@ -86,6 +91,7 @@ export class App extends React.Component<{}, AppState> {
                     lines: [],
                     status: "small-upload",
                 });
+                // Clear the cache from the previous file
                 this.textViewRef.clearMeasurerCache();
                 const { data } = await api.uploadFile(
                     file,
@@ -93,6 +99,7 @@ export class App extends React.Component<{}, AppState> {
                     this.onDownloadProgress,
                 );
 
+                // Split the result to lines
                 this.setState({
                     lines: data.split(/\r?\n/gm),
                     status: "uploaded",
