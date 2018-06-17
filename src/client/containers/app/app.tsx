@@ -15,7 +15,8 @@ export interface AppState {
         | "uploading"
         | "processing"
         | "downloading"
-        | "error";
+        | "error"
+        | "file-too-big";
 
     loaded: number;
     total: number;
@@ -74,44 +75,48 @@ export class App extends React.Component<{}, AppState> {
         if (acceptedFiles && acceptedFiles.length === 1) {
             const file = acceptedFiles[0];
 
-            // Only display the upload progress if it's taking more
-            // than 500 ms
-            // This way the user doesn't have to see th upload progress
-            // instantly jumping to 100%
-            const handle = window.setTimeout(() => {
-                const { status } = this.state;
-                if (status !== "processing") {
-                    this.setState({ status: "uploading" });
-                }
-            }, 500);
-            try {
-                this.setState({
-                    total: 0,
-                    loaded: 0,
-                    lines: [],
-                    status: "small-upload",
-                });
-                // Clear the cache from the previous file
-                this.textViewRef.clearMeasurerCache();
-                const { data } = await api.uploadFile(
-                    file,
-                    this.onUploadProgress,
-                    this.onDownloadProgress,
-                );
+            if (file.size <= 10 * 1024 * 1024) {
+                // Only display the upload progress if it's taking more
+                // than 500 ms
+                // This way the user doesn't have to see th upload progress
+                // instantly jumping to 100%
+                const handle = window.setTimeout(() => {
+                    const { status } = this.state;
+                    if (status !== "processing") {
+                        this.setState({ status: "uploading" });
+                    }
+                }, 500);
+                try {
+                    this.setState({
+                        total: 0,
+                        loaded: 0,
+                        lines: [],
+                        status: "small-upload",
+                    });
+                    // Clear the cache from the previous file
+                    this.textViewRef.clearMeasurerCache();
+                    const { data } = await api.uploadFile(
+                        file,
+                        this.onUploadProgress,
+                        this.onDownloadProgress,
+                    );
 
-                // Split the result to lines
-                this.setState({
-                    lines: data.split(/\r?\n/gm),
-                    status: "uploaded",
-                });
-            } catch (error) {
-                this.setState({
-                    status: "error",
-                    loaded: 0,
-                    total: 0,
-                });
-            } finally {
-                window.clearTimeout(handle);
+                    // Split the result to lines
+                    this.setState({
+                        lines: data.split(/\r?\n/gm),
+                        status: "uploaded",
+                    });
+                } catch (error) {
+                    this.setState({
+                        status: "error",
+                        loaded: 0,
+                        total: 0,
+                    });
+                } finally {
+                    window.clearTimeout(handle);
+                }
+            } else {
+                this.setState({ status: "file-too-big" });
             }
         }
     };
@@ -155,6 +160,10 @@ export class App extends React.Component<{}, AppState> {
 
             case "uploaded": {
                 return !lines || lines.length === 0 ? "The file is empty" : "";
+            }
+
+            case "file-too-big": {
+                return "File too big, max. 10 MB";
             }
 
             default: {
