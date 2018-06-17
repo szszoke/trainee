@@ -3,9 +3,10 @@ import { DropFilesEventHandler } from "react-dropzone";
 import { TextView, Uploader } from "~/components";
 import api, { ProgressEvent } from "~/api";
 import "./app.scss";
+import "react-virtualized/styles.css";
 
 export interface AppState {
-    content: string;
+    lines: string[];
 
     status:
         | "empty"
@@ -13,6 +14,7 @@ export interface AppState {
         | "small-upload"
         | "uploading"
         | "processing"
+        | "downloading"
         | "error";
 
     loaded: number;
@@ -20,11 +22,13 @@ export interface AppState {
 }
 
 export class App extends React.Component<{}, AppState> {
+    private textViewRef: TextView;
+
     constructor(props) {
         super(props);
 
         this.state = {
-            content: null,
+            lines: [],
             status: "empty",
             loaded: 0,
             total: 0,
@@ -32,7 +36,7 @@ export class App extends React.Component<{}, AppState> {
     }
 
     render() {
-        const { content, status } = this.state;
+        const { lines, status } = this.state;
 
         return (
             <div className="app__inner">
@@ -46,15 +50,19 @@ export class App extends React.Component<{}, AppState> {
                         paddingBottom: 0,
                     }}
                 >
-                    <TextView placeholder={this.textViewPlaceholder()}>
-                        {content}
-                    </TextView>
+                    <TextView
+                        ref={ref => (this.textViewRef = ref)}
+                        placeholder={this.textViewPlaceholder()}
+                        lines={lines}
+                    />
                 </div>
                 <div className="app__card">
                     <Uploader
-                        disabled={
-                            status === "uploading" || status === "processing"
-                        }
+                        disabled={[
+                            "uploading",
+                            "processing",
+                            "downloading",
+                        ].includes(status)}
                         onDrop={this.onDropFile}
                     />
                 </div>
@@ -75,15 +83,18 @@ export class App extends React.Component<{}, AppState> {
                 this.setState({
                     total: 0,
                     loaded: 0,
-                    content: null,
+                    lines: [],
                     status: "small-upload",
                 });
+                this.textViewRef.clearMeasurerCache();
                 const { data } = await api.uploadFile(
                     file,
                     this.onUploadProgress,
+                    this.onDownloadProgress,
                 );
+
                 this.setState({
-                    content: data,
+                    lines: data.split(/\r?\n/gm),
                     status: "uploaded",
                 });
             } catch (error) {
@@ -107,8 +118,10 @@ export class App extends React.Component<{}, AppState> {
         });
     };
 
+    onDownloadProgress = () => this.setState({ status: "downloading" });
+
     textViewPlaceholder = () => {
-        const { content, status, loaded, total } = this.state;
+        const { lines, status, loaded, total } = this.state;
 
         switch (status) {
             case "small-upload": {
@@ -122,7 +135,11 @@ export class App extends React.Component<{}, AppState> {
             }
 
             case "processing": {
-                return "Processing";
+                return "Processing...";
+            }
+
+            case "downloading": {
+                return "Downloading...";
             }
 
             case "error": {
@@ -130,7 +147,7 @@ export class App extends React.Component<{}, AppState> {
             }
 
             case "uploaded": {
-                return !content ? "The file is empty" : "";
+                return !lines || lines.length === 0 ? "The file is empty" : "";
             }
 
             default: {

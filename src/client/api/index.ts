@@ -16,12 +16,14 @@ export default new class {
     uploadFile = (
         file: File,
         onUploadProgress?: ProgressEvent,
+        onDownloadProgress?: ProgressEvent,
     ): AxiosPromise => {
         const data = new FormData();
         data.append("file", file);
 
         return axios.post("/upload", data, {
             onUploadProgress,
+            onDownloadProgress,
         });
     };
 }();

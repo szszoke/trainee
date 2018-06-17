@@ -10,31 +10,30 @@
     height: calc(100% - 8px);
 }
 
-.text-view__preformatted-container {
-    overflow: auto;
-    resize: none;
-    white-space: pre;
-    white-space: pre-wrap;
-    width: 100%;
-    margin: 0;
-    box-sizing: border-box;
+.text-view__auto-sizer-container {
     height: 100%;
-    border: 1px solid $grey1;
+}
+
+.text-view__list {
     outline: none;
+    border: 1px solid $grey1;
+}
+
+.text-view__list:focus,
+.text-view__list:focus-within {
+    border-color: $blue1;
+}
+
+.text-view__formatted-container {
     line-height: 1.5;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 1.1rem;
 }
 
-.text-view__preformatted-container:focus,
-.text-view__preformatted-container:focus-within {
-    border-color: $blue1;
-}
-
 .text-view__placeholder {
     font-size: 2rem;
     font-weight: bold;
-    color: $grey2;
+    color: $white1;
     height: 100%;
     display: grid;
     justify-content: center;
